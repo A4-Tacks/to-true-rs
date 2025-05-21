@@ -1,0 +1,15 @@
+[package]
+name = "to-true"
+version = "0.1.0"
+edition = "2021"
+
+authors = ["A4-Tacks <wdsjxhno1001@163.com>"]
+keywords = ["no_std", "bool", "state"]
+categories = ["no-std", "no-std::no-alloc"]
+description = "Convenient conversion of bool states"
+
+license = "MIT"
+repository = "https://github.com/A4-Tacks/to-true-rs"
+readme = "README.md"
+
+[dependencies]
