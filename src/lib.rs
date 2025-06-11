@@ -78,3 +78,43 @@ impl InTrue for bool {
         (!old).then(f)
     }
 }
+
+/// A closure that does not run on the first call
+///
+/// # Examples
+///
+/// ```
+/// let mut n = 0;
+/// let mut f = to_true::skip(|| {n += 1; n});
+///
+/// assert_eq!(f(), None);
+/// assert_eq!(f(), Some(1));
+/// assert_eq!(f(), Some(2));
+/// ```
+pub fn skip<R>(mut f: impl FnMut() -> R) -> impl FnMut() -> Option<R> {
+    let mut state = false;
+    move || {
+        state.in_true(&mut f)
+    }
+}
+
+/// A closure that is runs only once
+///
+/// # Examples
+///
+/// ```
+/// let mut n = 0;
+/// let mut f = to_true::once(|| {n += 1; n});
+///
+/// assert_eq!(f(), Some(1));
+/// assert_eq!(f(), None);
+/// assert_eq!(f(), None);
+/// # drop(f);
+/// assert_eq!(n, 1);
+/// ```
+pub fn once<R>(f: impl FnOnce() -> R) -> impl FnMut() -> Option<R> {
+    let mut f = Some(f);
+    move || {
+        f.take().map(|f| f())
+    }
+}
